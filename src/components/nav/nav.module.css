@@ -2,7 +2,7 @@
     height: 100px;
     display: flex;
     flex: 1;
-    background-color: #7f7f7f;
+    background-color: var(--color-nav-bar);
     justify-content: center;
 }
 
@@ -13,8 +13,11 @@
 }
 
 .nav-item {
-    background-color: pink;
     margin-left: 10px;
     margin-right: 10px;
     font-size: 2rem;
+}
+
+.nav-item-current {
+    text-decoration: underline;
 }

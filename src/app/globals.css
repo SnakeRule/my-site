@@ -1,10 +1,13 @@
 :root {
-  --color-primary: #0070f3;
-  --color-secondary: #ff4081;
-  --color-background: #f5f5f5;
-  --color-text: #333333;
+  --color-primary: #6b8e6e;      /* deeper sage */
+  --color-secondary: #b7a77a;    /* muted sand */
+  --color-background: #e5e4db;   /* stone */
+  --color-surface: #c9cfc3;      /* soft moss */
+  --color-text: #2d3a2e;         /* dark olive */
+  --color-nav-bar: #a3b18a;      /* muted olive */
+  --color-link: #23443b;         /* dark earthy green for better contrast */
+  --color-accent: #8f9779;       /* muted green */
 }
-
 body {
   background: var(--color-background);
   color: var(--color-foreground);
@@ -13,6 +16,7 @@ body {
 
 a {
   text-decoration: none;
+  color: var(--color-link)
 }
 
 a:hover {
