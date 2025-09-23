@@ -34,9 +34,7 @@ export default function PhotoCarousel({
         break;
       }
       case "next": {
-        if (index < photos.length - 1) {
-          setImageSrc(index < maxIndex ? photos[index + 1].src : photos[0].src);
-        }
+        setImageSrc(index < maxIndex ? photos[index + 1].src : photos[0].src);
         break;
       }
     }
