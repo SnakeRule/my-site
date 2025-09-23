@@ -1,17 +1,62 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import styles from "@/app/photos/photos.module.css";
+import { photos } from "@/lib/photos";
+import PhotoCarousel from "./components/photoCarousel";
 
 export default function Photos() {
+  const [carouselOpen, setCarouselOpen] = useState(false);
+  const [carouselVisible, setCarouselVisible] = useState(false);
+  const [selectedPhoto, setSelectedPhoto] = useState("");
+
+  const openCarousel = (photoSrc: string) => {
+    setSelectedPhoto(photoSrc);
+    setCarouselOpen(true);
+  };
+
+  const closeCarousel = () => {
+    setCarouselVisible(false);
+    setTimeout(() => setCarouselOpen(false), 200);
+  };
+
+  // This will prevent the page from scrolling while the photo carousel is open
+  useEffect(() => {
+    if (carouselOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [carouselOpen]);
+
   return (
     <div>
-      <p>MOI</p>
-      <Image
-        alt="Lepardi"
-        src={
-          "https://upload.wikimedia.org/wikipedia/commons/7/70/African_leopard_male_%28cropped%29.jpg"
-        }
-        width={465}
-        height={464}
-      />
+      {carouselOpen && (
+        <PhotoCarousel
+          closeCarousel={closeCarousel}
+          isVisible={carouselVisible}
+          setIsVisible={setCarouselVisible}
+          imageSrc={selectedPhoto}
+          setImageSrc={setSelectedPhoto}
+        />
+      )}
+      <div className={styles.container}>
+        {photos.map((photo) => (
+          <Image
+            key={photo.src}
+            alt={photo.alt}
+            src={photo.src}
+            width={photo.width}
+            height={photo.height}
+            onClick={() => openCarousel(photo.src)}
+          />
+        ))}
+      </div>
     </div>
   );
 }

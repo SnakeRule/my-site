@@ -22,3 +22,11 @@ a {
 a:hover {
   color: green
 }
+
+scroll-disabled {
+  overflow: hidden;
+}
+
+scroll-enabled {
+  overflow: visible;
+}
