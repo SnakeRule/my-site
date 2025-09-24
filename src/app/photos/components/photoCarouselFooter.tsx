@@ -1,28 +1,33 @@
+"use client";
+
 import Image from "next/image";
-import { type Dispatch, type SetStateAction, useEffect } from "react";
+import { type Dispatch, type SetStateAction, useEffect, useRef } from "react";
 import styles from "@/app/photos/photos.module.css";
-import { photos } from "@/lib/photos";
 
 type PhotoCarouselFooterProps = {
   imageSrc: string;
   setImageSrc: Dispatch<SetStateAction<string>>;
+  photoPaths: string[];
 };
 
 export default function PhotoCarouselFooter({
   imageSrc,
   setImageSrc,
+  photoPaths,
 }: PhotoCarouselFooterProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
-      const index = photos.findIndex((photo) => photo.src === imageSrc);
-      const maxIndex = photos.length - 1;
+      const index = photoPaths.findIndex((photo) => photo === imageSrc);
+      const maxIndex = photoPaths.length - 1;
       switch (event.key) {
         case "ArrowLeft": {
-          setImageSrc(index > 0 ? photos[index - 1].src : photos[maxIndex].src);
+          setImageSrc(index > 0 ? photoPaths[index - 1] : photoPaths[maxIndex]);
           break;
         }
         case "ArrowRight": {
-          setImageSrc(index < maxIndex ? photos[index + 1].src : photos[0].src);
+          setImageSrc(index < maxIndex ? photoPaths[index + 1] : photoPaths[0]);
           break;
         }
       }
@@ -33,23 +38,32 @@ export default function PhotoCarouselFooter({
     return () => {
       window.removeEventListener("keydown", handleKeyPress);
     };
-  }, [imageSrc, setImageSrc]);
+  }, [imageSrc, setImageSrc, photoPaths]);
+
+  useEffect(() => {
+    if (containerRef) {
+      const index = photoPaths.findIndex((photo) => photo === imageSrc);
+      console.log(120 * index);
+      containerRef.current?.scroll({
+        behavior: "smooth",
+        left: 120 * index,
+      });
+    }
+  }, [photoPaths, imageSrc]);
 
   return (
-    <div className={styles["carousel-footer-container"]}>
-      {photos.map((photo) => (
-        <div key={photo.src} className={styles["carousel-footer-photo"]}>
+    <div className={styles["carousel-footer-container"]} ref={containerRef}>
+      {photoPaths.map((photo) => (
+        <div key={photo} className={styles["carousel-footer-photo"]}>
           <Image
             className={
-              imageSrc === photo.src
-                ? styles["carousel-footer-photo-selected"]
-                : ""
+              imageSrc === photo ? styles["carousel-footer-photo-selected"] : ""
             }
-            alt={photo.alt}
-            src={photo.src}
+            alt={"Gallery footer photo"}
+            src={photo}
             fill
             objectFit="contain"
-            onClick={() => setImageSrc(photo.src)}
+            onClick={() => setImageSrc(photo)}
           />
         </div>
       ))}

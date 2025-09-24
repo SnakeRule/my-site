@@ -3,13 +3,13 @@ import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import Image from "next/image";
 import { type Dispatch, type SetStateAction, useEffect } from "react";
 import styles from "@/app/photos/photos.module.css";
-import { photos } from "@/lib/photos";
 import PhotoCarouselFooter from "./photoCarouselFooter";
 
 type PhotoCarouselProps = {
   closeCarousel: () => void;
   isVisible: boolean;
   setIsVisible: (state: boolean) => void;
+  photoPaths: string[];
   imageSrc: string;
   setImageSrc: Dispatch<SetStateAction<string>>;
 };
@@ -20,21 +20,22 @@ export default function PhotoCarousel({
   setIsVisible,
   imageSrc,
   setImageSrc,
+  photoPaths,
 }: PhotoCarouselProps) {
   useEffect(() => {
     setIsVisible(true);
   }, [setIsVisible]);
 
   const arrowClicked = (direction: "next" | "previous") => {
-    const index = photos.findIndex((photo) => photo.src === imageSrc);
-    const maxIndex = photos.length - 1;
+    const index = photoPaths.findIndex((photo) => photo === imageSrc);
+    const maxIndex = photoPaths.length - 1;
     switch (direction) {
       case "previous": {
-        setImageSrc(index > 0 ? photos[index - 1].src : photos[maxIndex].src);
+        setImageSrc(index > 0 ? photoPaths[index - 1] : photoPaths[maxIndex]);
         break;
       }
       case "next": {
-        setImageSrc(index < maxIndex ? photos[index + 1].src : photos[0].src);
+        setImageSrc(index < maxIndex ? photoPaths[index + 1] : photoPaths[0]);
         break;
       }
     }
@@ -87,7 +88,11 @@ export default function PhotoCarousel({
           </div>
         </div>
       </div>
-      <PhotoCarouselFooter imageSrc={imageSrc} setImageSrc={setImageSrc} />
+      <PhotoCarouselFooter
+        imageSrc={imageSrc}
+        setImageSrc={setImageSrc}
+        photoPaths={photoPaths}
+      />
     </div>
   );
 }
