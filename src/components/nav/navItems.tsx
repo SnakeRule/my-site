@@ -15,6 +15,10 @@ const navItems = [
     label: "Photos",
     href: "/photos",
   },
+  {
+    label: "Electricity",
+    href: "/electricity",
+  },
 ];
 
 export default function NavItems() {
